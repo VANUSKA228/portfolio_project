@@ -30,7 +30,7 @@
 ### 1. Клонировать репозиторий
 
 ```bash
-git clone https://github.com/твой_username/portfolio_project.git
+git clone https://github.com/VANUSKA228/portfolio_project.git
 cd portfolio_project
 ```
 
@@ -58,10 +58,20 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-### 5. Создать суперпользователя
+### 5. Создать суперпользователя (автоматически, если его нет):
 
 ```bash
-python manage.py createsuperuser
+python manage.py initadmin
+```
+По умолчанию создаётся:
+
+Пользователь 
+```bash 
+admin
+```
+Пароль 
+```bash
+123
 ```
 
 ### 6. Запустить сервер разработки
@@ -80,30 +90,35 @@ http://127.0.0.1:8000/
 
 ```text
 portfolio_project/
-├── config/                # Настройки Django
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── accounts/              # Приложение пользователей
-│   ├── models.py          # Кастомная модель User (роль)
-│   ├── views.py           # Регистрация, выход
-│   ├── urls.py
-│   ├── forms.py           # Форма регистрации
-│   └── admin.py
-├── core/                  # Основное приложение
-│   ├── views.py           # Главная, профиль
-│   └── urls.py
+├── config/ # Настройки Django
+│ ├── init.py
+│ ├── settings.py # Конфигурация проекта (БД, приложения, статика)
+│ ├── urls.py # Главные маршруты
+│ └── wsgi.py
+├── accounts/ # Приложение для работы с пользователями
+│ ├── management/
+│ │ └── commands/
+│ │ └── initadmin.py # Команда автосоздания суперпользователя
+│ ├── models.py # Модель User с дополнительным полем role
+│ ├── views.py # Регистрация и кастомный выход
+│ ├── urls.py # Маршруты регистрации, входа, выхода
+│ ├── forms.py # Форма регистрации
+│ └── admin.py # Настройка отображения модели в админке
+├── core/ # Основное приложение (главная, профиль)
+│ ├── views.py # Главная страница и обработка профилей по ролям
+│ └── urls.py # Маршрут профиля
 ├── static/
-│   └── css/
-│       └── style.css      # Кастомные стили (тёмная/светлая тема)
-├── templates/             # HTML-шаблоны
-│   ├── base.html
-│   ├── home.html
-│   ├── registration/
-│   │   ├── login.html
-│   │   └── register.html
-│   ├── user_profile.html
-│   └── admin_profile.html
+│ └── css/
+│ └── style.css # Кастомные стили (тёмная/светлая тема, кнопки, карточки)
+├── templates/ # HTML-шаблоны
+│ ├── base.html # Базовый шаблон: навигация, переключатель тем, футер
+│ ├── home.html # Главная страница с преимуществами
+│ ├── registration/
+│ │ ├── login.html # Форма входа
+│ │ └── register.html # Форма регистрации
+│ ├── user_profile.html # Профиль обычного пользователя
+│ └── admin_profile.html # Панель администратора (список пользователей)
+├── .gitignore
 ├── manage.py
 ├── requirements.txt
 └── README.md
