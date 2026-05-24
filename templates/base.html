@@ -1,30 +1,53 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ГитВитрина{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{% block title %}DEVfolio{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">ГитВитрина</a>
-            <div class="navbar-nav ms-auto">
+            <a class="navbar-brand" href="{% url 'home' %}"><span>DEV</span>folio</a>
+            <ul class="navbar-nav">
                 {% if user.is_authenticated %}
-                    <span class="navbar-text me-2">👤 {{ user.username }}</span>
-                    <a class="nav-link" href="{% url 'profile' %}">Мой профиль</a>
-                    <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                    <li class="navbar-text">👤 {{ user.username }}</li>
+                    <li><a class="nav-link" href="{% url 'profile' %}">Профиль</a></li>
+                    <li><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li>
                 {% else %}
-                    <a class="nav-link" href="{% url 'login' %}">Войти</a>
-                    <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+                    <li><a class="nav-link" href="{% url 'login' %}">Войти</a></li>
+                    <li><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>
                 {% endif %}
-            </div>
+                <li><button class="theme-toggle" id="themeToggle">☀️</button></li>
+            </ul>
         </div>
     </nav>
-    <main class="container mt-4">
+
+    <main>
         {% block content %}{% endblock %}
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <footer>
+        <div class="container">
+            © 2026 DEVfolio
+        </div>
+    </footer>
+
+    <script>
+        const html = document.documentElement;
+        const toggle = document.getElementById('themeToggle');
+        const saved = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', saved);
+        toggle.textContent = saved === 'light' ? '🌙' : '☀️';
+
+        toggle.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            toggle.textContent = next === 'light' ? '🌙' : '☀️';
+        });
+    </script>
 </body>
 </html>

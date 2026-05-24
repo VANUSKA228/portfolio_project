@@ -1,9 +1,32 @@
 {% extends 'base.html' %}
-{% block title %}Главная{% endblock %}
+{% block title %}Главная — DEVfolio{% endblock %}
+
 {% block content %}
-<div class="text-center mt-5">
-    <h1 class="display-4">ГитВитрина</h1>
-    <p class="lead">Платформа для демонстрации проектов из GitHub</p>
-    <p class="text-muted">Здесь будет строка поиска и результаты</p>
+<section class="hero-section">
+    <div class="container">
+        <h1>Покажи свои <span class="accent-text">проекты</span><br>в живом портфолио</h1>
+        <p class="lead">Автоматическая загрузка из GitHub • Гибкие пресеты • Минимум рутины</p>
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-primary">Создать профиль</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary">Войти</a>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="features-grid">
+        <div class="card">
+            <h3 class="card-title">🎨 Гибкие пресеты</h3>
+            <p class="card-text">Сетка, Bento Grid или горизонтальная витрина — выберите стиль.</p>
+        </div>
+        <div class="card">
+            <h3 class="card-title">🔗 GitHub интеграция</h3>
+            <p class="card-text">Привяжите аккаунт и выбирайте репозитории для показа.</p>
+        </div>
+        <div class="card">
+            <h3 class="card-title">⚡ Живые демо</h3>
+            <p class="card-text">Одностраничные сайты открываются прямо внутри портфолио.</p>
+        </div>
+    </div>
 </div>
 {% endblock %}
