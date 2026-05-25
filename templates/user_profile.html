@@ -13,6 +13,21 @@
         </div>
     </div>
 
+    {% if messages %}
+        <div class="card mb-4" style="background: var(--accent-color); color: #0a0a0a;">
+            {% for message in messages %}
+                <p class="mb-0">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if request.session.original_admin_id %}
+        <div class="card mb-4" style="border-color: var(--accent-color);">
+            <p class="card-text">Вы находитесь в режиме технической поддержки.</p>
+            <a href="{% url 'admin_restore' %}" class="btn btn-primary">Выйти в админ-панель</a>
+        </div>
+    {% endif %}
+
     <div class="card">
         <h3 class="card-title">Моё портфолио</h3>
         <p class="card-text">Здесь будут отображаться ваши проекты после интеграции с GitHub.</p>

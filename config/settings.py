@@ -124,3 +124,35 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = 'profile'        # куда идти после логина
 LOGOUT_REDIRECT_URL = 'home'          # куда идти после выхода
 LOGIN_URL = 'login'                   # куда перенаправлять, если пользователь не авторизован
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'admin_actions.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'admin_actions': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}

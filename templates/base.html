@@ -9,13 +9,29 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="container">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; gap: 2rem;">
+            <!-- Логотип -->
             <a class="navbar-brand" href="{% url 'home' %}"><span>DEV</span>folio</a>
+
+            <!-- Поиск -->
+            <div style="position: relative; flex: 1; max-width: 400px;">
+                <input type="text" id="navSearchInput" class="form-control" placeholder="Найти разработчика..." style="width: 100%;">
+                <div id="navSearchResults" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 4px; z-index: 1000; max-height: 300px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- Навигация -->
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
                     <li class="navbar-text">👤 {{ user.username }}</li>
                     <li><a class="nav-link" href="{% url 'profile' %}">Профиль</a></li>
-                    <li><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li>
+                    {% if user.role == 'admin' %}
+                        <li><a class="nav-link" href="{% url 'user_public_profile' user.username %}">Моя страница</a></li>
+                    {% endif %}
+                    {% if request.session.original_admin_id %}
+                        <li><a class="nav-link" href="{% url 'admin_restore' %}">Выйти в админ-панель</a></li>
+                    {% else %}
+                        <li><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li>
+                    {% endif %}
                 {% else %}
                     <li><a class="nav-link" href="{% url 'login' %}">Войти</a></li>
                     <li><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>
@@ -36,6 +52,7 @@
     </footer>
 
     <script>
+        // Переключатель темы
         const html = document.documentElement;
         const toggle = document.getElementById('themeToggle');
         const saved = localStorage.getItem('theme') || 'dark';
@@ -47,6 +64,48 @@
             html.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
             toggle.textContent = next === 'light' ? '🌙' : '☀️';
+        });
+
+        // Живой поиск в навбаре
+        const navSearchInput = document.getElementById('navSearchInput');
+        const navSearchResults = document.getElementById('navSearchResults');
+
+        navSearchInput.addEventListener('input', async () => {
+            const query = navSearchInput.value.trim();
+            if (query.length < 1) {
+                navSearchResults.style.display = 'none';
+                navSearchResults.innerHTML = '';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/search/?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.results.length === 0) {
+                    navSearchResults.innerHTML = '<p class="text-secondary" style="padding: 0.8rem;">Ничего не найдено</p>';
+                    navSearchResults.style.display = 'block';
+                    return;
+                }
+
+                navSearchResults.innerHTML = data.results.map(user => `
+                    <a href="/user/${encodeURIComponent(user.username)}/" style="display: block; padding: 0.8rem; text-decoration: none; color: var(--text-color); border-bottom: 1px solid var(--border-color);">
+                        <strong>${user.username}</strong>
+                        <span class="text-secondary" style="float: right; font-size: 0.8rem;">${user.role}</span>
+                    </a>
+                `).join('');
+                navSearchResults.style.display = 'block';
+            } catch (e) {
+                navSearchResults.innerHTML = '<p class="text-secondary" style="padding: 0.8rem;">Ошибка поиска</p>';
+                navSearchResults.style.display = 'block';
+            }
+        });
+
+        // Закрытие результатов при клике вне поиска
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#navSearchInput') && !e.target.closest('#navSearchResults')) {
+                navSearchResults.style.display = 'none';
+            }
         });
     </script>
 </body>

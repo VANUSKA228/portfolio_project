@@ -1,10 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
-from core.views import home   # импортируем главную страницу
+from core.views import home
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),   # регистрация, вход, выход
-    path('', home, name='home'),                    # главная страница
-    path('', include('core.urls')),                 # профили и всё остальное
+    path('admin/', admin.site.urls),          # ← встроенная админка Django
+    path('accounts/', include('accounts.urls')),
+    path('', include('core.urls')),           # ← наши маршруты (должны быть после admin/)
 ]

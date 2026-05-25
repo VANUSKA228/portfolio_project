@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование пользователя{% endblock %}
+
+{% block content %}
+<div class="container form-container">
+    <div class="card">
+        <h2 class="card-title">Редактирование: {{ target_user.username }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="id_username" class="form-label">Имя пользователя</label>
+                <input type="text" name="username" id="id_username" class="form-control" value="{{ target_user.username }}" required>
+            </div>
+            <div class="mb-4">
+                <label for="id_email" class="form-label">Email</label>
+                <input type="email" name="email" id="id_email" class="form-control" value="{{ target_user.email }}">
+            </div>
+            <div class="mb-4">
+                <label for="id_role" class="form-label">Роль</label>
+                <select name="role" id="id_role" class="form-control">
+                    <option value="user" {% if target_user.role == 'user' %}selected{% endif %}>Обычный пользователь</option>
+                    <option value="admin" {% if target_user.role == 'admin' %}selected{% endif %}>Администратор</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+        </form>
+        <p class="text-center mt-4">
+            <a href="{% url 'profile' %}" class="nav-link" style="display:inline;">← Назад к списку</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

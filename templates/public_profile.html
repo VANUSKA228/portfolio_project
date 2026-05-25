@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile_user.username }} — DEVfolio{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ profile_user.username|slice:":1"|upper }}
+        </div>
+        <div>
+            <h2 style="margin-bottom:0.2rem;">{{ profile_user.username }}</h2>
+            <p class="text-secondary">{{ profile_user.get_role_display }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="card-title">Портфолио</h3>
+        <p class="card-text">Здесь будут отображаться проекты пользователя после интеграции с GitHub.</p>
+    </div>
+</div>
+{% endblock %}
